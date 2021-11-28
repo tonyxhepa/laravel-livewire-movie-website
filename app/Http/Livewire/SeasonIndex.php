@@ -13,9 +13,23 @@ class SeasonIndex extends Component
 {
     use WithPagination;
 
+    public $search = '';
+    public $sort = 'asc';
+    public $perPage = 5;
+
     public Serie $serie;
 
     public $seasonNumber;
+    public $name;
+    public $posterPath;
+    public $showSeasonModal = false;
+    public $seasonId;
+
+    protected $rules = [
+        'name' => 'required',
+        'posterPath' => 'required',
+        'seasonNumber' => 'required'
+    ];
 
     // generate season
 
@@ -40,10 +54,54 @@ class SeasonIndex extends Component
         }
     }
 
+    public function showEditModal($id)
+    {
+        $this->seasonId = $id;
+        $this->loadSeason();
+        $this->showSeasonModal = true;
+    }
+    public function loadSeason()
+    {
+        $season = Season::findOrFail($this->seasonId);
+        $this->name = $season->name;
+        $this->posterPath = $season->poster_path;
+        $this->seasonNumber = $season->season_number;
+    }
+    public function closeSeasonModal()
+    {
+        $this->showSeasonModal = false;
+    }
+    public function updateSeason()
+    {
+        $this->validate();
+        $season = Season::findOrFail($this->seasonId);
+        $season->update([
+          'name' => $this->name,
+          'season_number' => $this->seasonNumber,
+          'poster_path' => $this->posterPath
+      ]);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Season updated']);
+        $this->reset(['seasonNumber', 'name', 'posterPath', 'seasonId', 'showSeasonModal']);
+    }
+    public function deleteSeason($id)
+    {
+        $season = Season::findOrFail($id);
+        $season->delete();
+        $this->reset(['seasonNumber', 'name', 'posterPath', 'seasonId', 'showSeasonModal']);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Season deleted']);
+    }
+    public function resetFilters()
+    {
+        $this->reset();
+    }
+
     public function render()
     {
         return view('livewire.season-index', [
-            'seasons' => Season::where('serie_id', $this->serie->id)->paginate(5)
+            'seasons' => Season::where('serie_id', $this->serie->id)
+                                 ->search('name', $this->search)
+                                 ->orderBy('name', $this->sort)
+                                 ->paginate($this->perPage)
         ]);
     }
 }
