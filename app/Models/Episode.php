@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Episode extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['season_id', 'tmdb_id', 'name', 'slug', 'episode_number', 'overview', 'is_public', 'visits'];
+
 }
