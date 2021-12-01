@@ -42,7 +42,7 @@ class EpisodeIndex extends Component
                 $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Episode exists']);
             }
         } else {
-            $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Api not exists']);
+            $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Episode not exists']);
             $this->reset('seasonNumber');
         }
     }
