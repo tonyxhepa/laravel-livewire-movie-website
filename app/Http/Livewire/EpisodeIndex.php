@@ -15,7 +15,22 @@ class EpisodeIndex extends Component
     public Serie $serie;
     public Season $season;
 
+    public $search = '';
+    public $sort = 'asc';
+    public $perPage = 5;
+
     public $episodeNumber;
+    public $episodeId;
+    public $showEpisodeModal = false;
+    public $overview;
+    public $name;
+
+    protected $rules = [
+        'name' => 'required',
+        'overview' => 'required',
+        'episodeNumber' => 'required'
+    ];
+
     // generate season
 
     public function generateEpisode()
@@ -34,7 +49,7 @@ class EpisodeIndex extends Component
                     'episode_number' => $newEpisode['episode_number'],
                     'overview'  => $newEpisode['overview'],
                     'is_public' => false,
-                    'visits'    => 1 
+                    'visits'    => 1
                 ]);
                 $this->reset('episodeNumber');
                 $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Episode created']);
@@ -47,10 +62,51 @@ class EpisodeIndex extends Component
         }
     }
 
+    public function showEditModal($id)
+    {
+        $this->episodeId = $id;
+        $this->loadEpisode();
+        $this->showEpisodeModal = true;
+    }
+    public function loadEpisode()
+    {
+        $episode = Episode::findOrFail($this->episodeId);
+        $this->name = $episode->name;
+        $this->overview = $episode->overview;
+        $this->episodeNumber = $episode->episode_number;
+    }
+    public function closeEpisodeModal()
+    {
+        $this->showEpisodeModal = false;
+    }
+    public function updateEpisode()
+    {
+        $this->validate();
+        $episode = Episode::findOrFail($this->episodeId);
+        $episode->update([
+            'name' => $this->name,
+            'episode_number' => $this->episodeNumber,
+            'overview' => $this->overview
+        ]);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Episode updated']);
+        $this->reset(['episodeNumber', 'name', 'overview', 'episodeId', 'showEpisodeModal']);
+    }
+    public function deleteEpisode($id)
+    {
+        $episode = Episode::findOrFail($id);
+        $episode->delete();
+        $this->reset(['episodeNumber', 'name', 'overview', 'episodeId', 'showEpisodeModal']);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Episode deleted']);
+    }
+    public function resetFilters()
+    {
+        $this->reset();
+    }
+
     public function render()
     {
         return view('livewire.episode-index', [
-            'episodes' => Episode::paginate(5)
+            'episodes' => Episode::where('season_id', $this->season->id)->search('name', $this->search)->orderBy('name', $this->sort)->paginate($this->perPage)
         ]);
     }
 }
