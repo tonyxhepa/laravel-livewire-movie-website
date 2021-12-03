@@ -17,6 +17,10 @@ class CastIndex extends Component
     public $castPosterPath;
     public $castId;
 
+    public $search = '';
+    public $sort = 'asc';
+    public $perPage = 5;
+
     public $showCastModal = false;
 
     protected $rules = [
@@ -81,10 +85,15 @@ class CastIndex extends Component
         $this->reset();
     }
 
+    public function resetFilters()
+    {
+        $this->reset();
+    }
+
     public function render()
     {
         return view('livewire.cast-index', [
-            'casts' => Cast::paginate(5),
+            'casts' => Cast::search('name', $this->search)->orderBy('name', $this->sort)->paginate($this->perPage),
         ]);
     }
 }
