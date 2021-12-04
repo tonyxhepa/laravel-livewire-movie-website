@@ -7,8 +7,6 @@
     <list default="true" id="db213d22-35c0-497b-ba73-8876f3c816d0" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Livewire/MovieIndex.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Livewire/MovieIndex.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Livewire/SeasonIndex.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Livewire/SeasonIndex.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Movie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Movie.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/livewire/movie-index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/livewire/movie-index.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -202,6 +200,7 @@
       <workItem from="1638568861470" duration="410000" />
       <workItem from="1638606787544" duration="7611000" />
       <workItem from="1638615525883" duration="2000" />
+      <workItem from="1638636463730" duration="1076000" />
     </task>
     <servers />
   </component>

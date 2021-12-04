@@ -68,7 +68,7 @@ class MovieIndex extends Component
     public function render()
     {
         return view('livewire.movie-index', [
-            'movies' => Movie::search('title', $this->search)->orderBy('title', $this->sort)->paginate($this->perPage)
+            'movies' => Movie::search('title', $this->search)->sortable()->paginate($this->perPage)
         ]);
     }
 }
