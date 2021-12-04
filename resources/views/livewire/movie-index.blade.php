@@ -1,6 +1,20 @@
 <section class="container mx-auto p-6 font-mono">
     <div class="w-full flex mb-4 p-2 justify-end">
-        <x-m-button wire:click="showCreateModal">Create Movie</x-m-button>
+        <form class="flex space-x-4 shadow bg-white rounded-md m-2 p-2">
+            <div class="p-1 flex items-center">
+                <label for="tmdb_id_g" class="block text-sm font-medium text-gray-700 mr-4">Tmdb ID</label>
+                <div class="relative rounded-md shadow-sm">
+                    <input wire:model="tmdbId" id="tmdb_id_g" name="tmdb_id_g"
+                           class="px-3 py-2 border border-gray-300 rounded" placeholder="Tmdb ID" />
+                </div>
+            </div>
+            <div class="p-1">
+                <button type="button" wire:click="generateMovie"
+                        class="inline-flex items-center justify-center py-2 px-4 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-green-700 transition duration-150 ease-in-out disabled:opacity-50">
+                    <span>Generate Movie</span>
+                </button>
+            </div>
+        </form>
     </div>
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
@@ -91,12 +105,79 @@
                     <form>
                         <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white sm:p-6">
-                                <div class="grid grid-cols-6 gap-6">
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <label for="first-name" class="block text-sm font-medium text-gray-700">Tag
-                                            name</label>
-                                        <input wire:model="title" type="text" autocomplete="given-name"
-                                               class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <div class="flex flex-col">
+                                    <label for="first-name"
+                                           class="block text-sm font-medium text-gray-700 mr-4">Title</label>
+                                    <input wire:model="title" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('title')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Runtime</label>
+                                    <input wire:model="runtime" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('runtime')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Language</label>
+                                    <input wire:model="lang" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('lang')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Format</label>
+                                    <input wire:model="videoFormat" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('videoFormat')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Rating</label>
+                                    <input wire:model="rating" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('rating')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Poster</label>
+                                    <input wire:model="posterPath" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('posterPath')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 mr-4">Backdrop</label>
+                                    <input wire:model="backdropPath" type="text"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('backdropPath')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="overview"
+                                           class="block text-sm font-medium text-gray-700 mr-4">Overview</label>
+                                    <textarea
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ $overview }}</textarea>
+                                    @error('overview')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center px-2 py-6">
+                                        <input wire:model="isPublic" type="checkbox"
+                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                            Published
+                                        </label>
                                     </div>
                                 </div>
                             </div>

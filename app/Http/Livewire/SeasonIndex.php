@@ -35,12 +35,15 @@ class SeasonIndex extends Component
 
     public function generateSeason()
     {
-        $newSeason = Http::get('https://api.themoviedb.org/3/tv/' . $this->serie->tmdb_id . '/season/' . $this->seasonNumber . '?api_key=8a11aac3fb4ef5f1f9607ee7e0329793&language=en-US
+        $season = Season::where('season_number', $this->seasonNumber)->exists();
+        if($season){
+            $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Season exists']);
+            return;
+        }
+        $apiSeason = Http::get('https://api.themoviedb.org/3/tv/' . $this->serie->tmdb_id . '/season/' . $this->seasonNumber . '?api_key=8a11aac3fb4ef5f1f9607ee7e0329793&language=en-US
                     ');
-        if ($newSeason->ok()) {
-
-            $season = Season::where('tmdb_id', $newSeason['id'])->first();
-            if (!$season) {
+        if ($apiSeason->ok()) {
+                $newSeason = $apiSeason->json();
                 Season::create([
                     'serie_id' => $this->serie->id,
                     'tmdb_id' => $newSeason['id'],
@@ -51,14 +54,12 @@ class SeasonIndex extends Component
                 ]);
                 $this->reset('seasonNumber');
                 $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Season created']);
-            } else {
-                $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Season exists']);
-            }
+           
         } else {
             $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Api not exists']);
             $this->reset('seasonNumber');
         }
-      
+
     }
 
     public function showEditModal($id)
