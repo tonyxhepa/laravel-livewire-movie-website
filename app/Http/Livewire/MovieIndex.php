@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -13,7 +14,8 @@ class MovieIndex extends Component
     use WithPagination;
 
     public $search = '';
-    public $sort = 'asc';
+    public $sortColumn = 'title';
+    public $sortDirection = 'asc';
     public $perPage = 5;
 
     public $title;
@@ -26,6 +28,21 @@ class MovieIndex extends Component
     public $overview;
     public $isPublic;
     public $tmdbId;
+    public $movieId;
+    public $movie;
+
+    public $showMovieModal = false;
+    protected $rules = [
+        'title' => 'required',
+        'posterPath' => 'required',
+        'runtime' => 'required',
+        'lang' => 'required',
+        'videoFormat' => 'required',
+        'rating' => 'required',
+        'backdropPath' => 'required',
+        'overview' => 'required',
+        'isPublic' => 'required'
+    ];
 
     // generate movie
 
@@ -43,7 +60,7 @@ class MovieIndex extends Component
         if ($apiMovie->successful()) {
             $newMovie = $apiMovie->json();
 
-            Movie::create([
+            $created_movie = Movie::create([
                 'tmdb_id' => $newMovie['id'],
                 'title' => $newMovie['title'],
                 'slug'  => Str::slug($newMovie['title']),
@@ -57,6 +74,10 @@ class MovieIndex extends Component
                 'poster_path' => $newMovie['poster_path'],
                 'backdrop_path' => $newMovie['backdrop_path']
             ]);
+            $tmdb_genres = $newMovie['genres'];
+            $tmdb_genres_ids = collect($tmdb_genres)->pluck('id');
+            $genres = Genre::whereIn('tmdb_id', $tmdb_genres_ids)->get();
+            $created_movie->genres()->attach($genres);
             $this->reset('tmdbId');
             $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Movie created']);
         } else {
@@ -65,10 +86,73 @@ class MovieIndex extends Component
         }
     }
 
+    public function sortByColumn($column)
+    {
+        if($this->sortColumn = $column){
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
+
+    public function showEditModal($movieId)
+    {
+        $this->movie = Movie::findOrFail($movieId);
+        $this->loadMovie();
+        $this->showMovieModal = true;
+    }
+
+    public function loadMovie()
+    {
+        
+        $this->title = $this->movie->title;
+        $this->runtime = $this->movie->runtime;
+        $this->lang = $this->movie->lang;
+        $this->videoFormat = $this->movie->video_format;
+        $this->rating = $this->movie->rating;
+        $this->posterPath = $this->movie->poster_path;
+        $this->backdropPath = $this->movie->backdrop_path;
+        $this->overview = $this->movie->overview;
+        $this->isPublic = $this->movie->is_public;
+    }
+
+    public function closeMovieModal()
+    {
+        $this->reset();
+    }
+
+    public function updateMovie()
+    {
+        $this->validate();
+        $this->movie->update([
+            'title' => $this->title,
+            'runtime' => $this->runtime,
+            'lang' => $this->lang,
+            'video_format' => $this->videoFormat,
+            'rating' => $this->rating,
+            'poster_path' => $this->posterPath,
+            'backdrop_path' => $this->backdropPath,
+            'overview' => $this->overview,
+            'is_public' => $this->isPublic,
+        ]);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Movie updated']);
+        $this->reset();
+    }
+
+    public function deleteMovie($movieId)
+    {
+        $movie = Movie::findOrFail($movieId);
+        $movie->delete();
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Movie Deleted']);
+        $this->reset();
+    }
+
+
     public function render()
     {
         return view('livewire.movie-index', [
-            'movies' => Movie::search('title', $this->search)->sortable()->paginate($this->perPage)
+            'movies' => Movie::search('title', $this->search)->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

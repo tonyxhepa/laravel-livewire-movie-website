@@ -19,32 +19,33 @@
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
         <div class="w-full shadow p-5 bg-white">
-            <div class="relative">
-                <div class="absolute flex items-center ml-2 h-full">
-                    <svg class="w-4 h-4 fill-current text-primary-gray-dark" viewBox="0 0 16 16" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M15.8898 15.0493L11.8588 11.0182C11.7869 10.9463 11.6932 10.9088 11.5932 10.9088H11.2713C12.3431 9.74952 12.9994 8.20272 12.9994 6.49968C12.9994 2.90923 10.0901 0 6.49968 0C2.90923 0 0 2.90923 0 6.49968C0 10.0901 2.90923 12.9994 6.49968 12.9994C8.20272 12.9994 9.74952 12.3431 10.9088 11.2744V11.5932C10.9088 11.6932 10.9495 11.7869 11.0182 11.8588L15.0493 15.8898C15.1961 16.0367 15.4336 16.0367 15.5805 15.8898L15.8898 15.5805C16.0367 15.4336 16.0367 15.1961 15.8898 15.0493ZM6.49968 11.9994C3.45921 11.9994 0.999951 9.54016 0.999951 6.49968C0.999951 3.45921 3.45921 0.999951 6.49968 0.999951C9.54016 0.999951 11.9994 3.45921 11.9994 6.49968C11.9994 9.54016 9.54016 11.9994 6.49968 11.9994Z">
-                        </path>
-                    </svg>
-                </div>
 
-                <input wire:model="search" type="text" placeholder="Search by title"
-                    class="px-8 py-3 w-full md:w-2/6 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm" />
-            </div>
 
-            <div class="flex justify-between mt-4">
-                <p class="font-medium">Filters</p>
-                <div class="flex justify-between space-x-2 space-y-4">
-                    <select wire:model="perPage"
-                        class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm">
-                        <option value="5">5 Per Page</option>
-                        <option value="10">10 Per Page</option>
-                        <option value="15">15 Per Page</option>
-                    </select>
-                    <button wire:click="resetFilters"
-                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-md">Reset
-                        Filter</button>
+            <div>
+                <div class="flex justify-between">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="absolute flex items-center ml-2 h-full">
+                                <svg class="w-4 h-4 fill-current text-primary-gray-dark" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15.8898 15.0493L11.8588 11.0182C11.7869 10.9463 11.6932 10.9088 11.5932 10.9088H11.2713C12.3431 9.74952 12.9994 8.20272 12.9994 6.49968C12.9994 2.90923 10.0901 0 6.49968 0C2.90923 0 0 2.90923 0 6.49968C0 10.0901 2.90923 12.9994 6.49968 12.9994C8.20272 12.9994 9.74952 12.3431 10.9088 11.2744V11.5932C10.9088 11.6932 10.9495 11.7869 11.0182 11.8588L15.0493 15.8898C15.1961 16.0367 15.4336 16.0367 15.5805 15.8898L15.8898 15.5805C16.0367 15.4336 16.0367 15.1961 15.8898 15.0493ZM6.49968 11.9994C3.45921 11.9994 0.999951 9.54016 0.999951 6.49968C0.999951 3.45921 3.45921 0.999951 6.49968 0.999951C9.54016 0.999951 11.9994 3.45921 11.9994 6.49968C11.9994 9.54016 9.54016 11.9994 6.49968 11.9994Z">
+                                    </path>
+                                </svg>
+                            </div>
+
+                            <input wire:model="search" type="text" placeholder="Search by title"
+                                class="px-8 py-3 w-full md:w-2/6 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm" />
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <select wire:model="perPage"
+                            class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm">
+                            <option value="5">5 Per Page</option>
+                            <option value="10">10 Per Page</option>
+                            <option value="15">15 Per Page</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,14 +55,59 @@
                 <thead>
                     <tr
                         class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                        <th class="px-4 py-3">
-                            @sortablelink('title', 'Title')
+                        <th class="px-4 py-3 cursor-pointer" wire:click="sortByColumn('title')">
+                            <div class="flex space-x-4 content-center">
+                                <span>Title</span>
+                                @if ($sortColumn == 'title' && $sortDirection == 'desc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                                    </svg>
+                                @elseif ($sortColumn == 'title' && $sortDirection == 'asc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                    </svg>
+                                @endif
+                            </div>
                         </th>
-                        <th class="px-4 py-3">
-                            @sortablelink('rating', 'Rating')
+                        <th class="px-4 py-3 cursor-pointer" wire:click="sortByColumn('rating')">
+                            <div class="flex space-x-4 content-center">
+                                <span>Rating</span>
+                                @if ($sortColumn == 'rating' && $sortDirection == 'desc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                                    </svg>
+                                @elseif ($sortColumn == 'rating' && $sortDirection == 'asc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                    </svg>
+                                @endif
+                            </div>
                         </th>
-                        <th class="px-4 py-3">
-                            @sortablelink('visits', 'Visits')
+                        <th class="px-4 py-3 cursor-pointer" wire:click="sortByColumn('visits')">
+                            <div class="flex space-x-4 content-center">
+                                <span>Visits</span>
+                                @if ($sortColumn == 'visits' && $sortDirection == 'desc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                                    </svg>
+                                @elseif ($sortColumn == 'visits' && $sortDirection == 'asc')
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-700" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                    </svg>
+                                @endif
+                            </div>
                         </th>
                         <th class="px-4 py-3">Runtime</th>
                         <th class="px-4 py-3">Published</th>
@@ -70,21 +116,21 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white">
-                    @foreach ($movies as $movie)
+                    @foreach ($movies as $table_movie)
                         <tr class="text-gray-700">
                             <td class="px-4 py-3 border">
-                                {{ $movie->title }}
+                                {{ $table_movie->title }}
                             </td>
                             <td class="px-4 py-3 border">
-                                {{ $movie->rating }}
+                                {{ $table_movie->rating }}
                             </td>
                             <td class="px-4 py-3 border">
-                                {{ $movie->visits }}
+                                {{ $table_movie->visits }}
                             </td>
                             <td class="px-4 py-3 text-ms font-semibold border">
-                                Hr: {{ date('H:i', mktime(0, $movie->runtime)) }}</td>
+                                {{ date('H:i', mktime(0, $table_movie->runtime)) }}</td>
                             <td class="px-4 py-3 text-ms font-semibold border">
-                                @if ($movie->is_public)
+                                @if ($table_movie->is_public)
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         Published
@@ -99,13 +145,13 @@
                             </td>
                             <td class="px-4 py-3 text-ms font-semibold border">
                                 <img class="h-12 w-12 rounded"
-                                    src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/{{ $movie->poster_path }}">
+                                    src="https://www.themoviedb.org/t/p/w220_and_h330_face/{{ $table_movie->poster_path }}">
                             </td>
 
                             <td class="px-4 py-3 text-sm border">
-                                <x-m-button wire:click="showEditModal({{ $movie->id }})"
+                                <x-m-button wire:click="showEditModal({{ $table_movie->id }})"
                                     class="bg-green-500 hover:bg-green-700 text-white">Edit</x-m-button>
-                                <x-m-button wire:click="deleteMovie({{ $movie->id }})"
+                                <x-m-button wire:click="deleteMovie({{ $table_movie->id }})"
                                     class="bg-red-500 hover:bg-red-700 text-white">Delete</x-m-button>
                             </td>
                         </tr>
@@ -180,6 +226,7 @@
                                         <span class="text-red-500 text-sm">{{ $message }}</span>
                                     @enderror
                                 </div>
+
                                 <div class="flex flex-col">
                                     <label for="first-name"
                                         class="block text-sm font-medium text-gray-700 mr-4">Backdrop</label>
