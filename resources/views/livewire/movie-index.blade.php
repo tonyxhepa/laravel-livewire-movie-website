@@ -19,8 +19,6 @@
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
         <div class="w-full shadow p-5 bg-white">
-
-
             <div>
                 <div class="flex justify-between">
                     <div class="flex-1">
@@ -119,7 +117,8 @@
                     @foreach ($movies as $table_movie)
                         <tr class="text-gray-700">
                             <td class="px-4 py-3 border">
-                                {{ $table_movie->title }}
+                                <span wire:click="showMovieDeatil({{ $table_movie->id }})"
+                                    class="text-blue-500 hover:text-blue-700 cursor-pointer">{{ $table_movie->title }}</span>
                             </td>
                             <td class="px-4 py-3 border">
                                 {{ $table_movie->rating }}
@@ -149,6 +148,8 @@
                             </td>
 
                             <td class="px-4 py-3 text-sm border">
+                                <x-m-button wire:click="showTrailerModal({{ $table_movie->id }})"
+                                    class="bg-indigo-500 hover:bg-indigo-700 text-white">Trailer</x-m-button>
                                 <x-m-button wire:click="showEditModal({{ $table_movie->id }})"
                                     class="bg-green-500 hover:bg-green-700 text-white">Edit</x-m-button>
                                 <x-m-button wire:click="deleteMovie({{ $table_movie->id }})"
@@ -265,6 +266,70 @@
             <x-m-button wire:click="closeMovieModal" class="bg-gray-600 hover:bg-gray-800 text-white">Cancel
             </x-m-button>
             <x-m-button wire:click="updateMovie">Update</x-m-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+    <x-jet-dialog-modal wire:model="showTrailer">
+        <x-slot name="title">Trailer Movie</x-slot>
+        <x-slot name="content">
+            @if ($movie)
+                <div class="flex space-x-4 space-y-2 m-2">
+                    @foreach ($movie->trailers as $trailer)
+                        <x-jet-button wire:click="deleteTrailer({{ $trailer->id }})" class="hover:bg-red-500">
+                            {{ $trailer->name }}</x-jet-button>
+                    @endforeach
+                </div>
+            @endif
+            <div class="mt-10 sm:mt-0">
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <form>
+                        <div class="shadow overflow-hidden sm:rounded-md">
+                            <div class="px-4 py-5 bg-white sm:p-6">
+                                <div class="flex flex-col">
+                                    <label for="first-name"
+                                        class="block text-sm font-medium text-gray-700 mr-4">Name</label>
+                                    <input wire:model="trailerName" type="text"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('trailerName')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="embedHtml" class="block text-sm font-medium text-gray-700 mr-4">Embed
+                                        Html</label>
+                                    <textarea wire:model="embedHtml"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                                    @error('embedHtml')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+            <x-m-button wire:click="closeMovieModal" class="bg-gray-600 hover:bg-gray-800 text-white">Cancel
+            </x-m-button>
+            <x-m-button wire:click="addTrailer">Add Trailer</x-m-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+    <x-jet-dialog-modal wire:model="showMovieDetailModal">
+        <x-slot name="title">Movie Details</x-slot>
+        <x-slot name="content">
+            <div class="mt-10 sm:mt-0">
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    @if ($movie)
+                        {{ $movie->title }}
+                    @endif
+                </div>
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+            <x-m-button wire:click="closeMovieModal" class="bg-gray-600 hover:bg-gray-800 text-white">Cancel
+            </x-m-button>
         </x-slot>
     </x-jet-dialog-modal>
 </section>

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\TrailerUrl;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -31,7 +32,13 @@ class MovieIndex extends Component
     public $movieId;
     public $movie;
 
+    public $trailerName;
+    public $embedHtml;
+
     public $showMovieModal = false;
+    public $showTrailer = false;
+    public $showMovieDetailModal = false;
+
     protected $rules = [
         'title' => 'required',
         'posterPath' => 'required',
@@ -148,8 +155,38 @@ class MovieIndex extends Component
         $this->reset();
     }
 
+    public function showTrailerModal($movieId)
+    {
+        $this->movie = Movie::findOrFail($movieId);
+        $this->showTrailer = true;
 
-    public function render()
+    }
+
+    public function addTrailer()
+    {
+        $this->movie->trailers()->create([
+            'name' => $this->trailerName,
+            'embed_html' => $this->embedHtml
+        ]);
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Trailer added']);
+        $this->reset();
+    }
+
+    public function deleteTrailer($trailerId)
+    {
+        $trailer = TrailerUrl::findOrFail($trailerId);
+        $trailer->delete();
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Trailer deleted']);
+        $this->reset();
+    }
+
+    public function showMovieDeatil($movieId)
+    {
+        $this->movie = Movie::findOrFail($movieId);
+        $this->showMovieDetailModal = true;
+    }
+
+      public function render()
     {
         return view('livewire.movie-index', [
             'movies' => Movie::search('title', $this->search)->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)

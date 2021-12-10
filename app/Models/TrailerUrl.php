@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class TrailerUrl extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'embed_html'];
+
+    public function trailerable()
+    {
+        return $this->morphTo();
+    }
+
+    
 }
