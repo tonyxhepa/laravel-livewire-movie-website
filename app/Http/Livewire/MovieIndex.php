@@ -39,6 +39,13 @@ class MovieIndex extends Component
     public $showTrailer = false;
     public $showMovieDetailModal = false;
 
+    protected $listeners = [
+        'tagAdded' => 'tagAdded',
+         'tagDetached' => 'tagDetached',
+        'castAdded' => 'castAdded',
+        'castDetached' => 'castDetached'
+        ];
+
     protected $rules = [
         'title' => 'required',
         'posterPath' => 'required',
@@ -112,7 +119,7 @@ class MovieIndex extends Component
 
     public function loadMovie()
     {
-        
+
         $this->title = $this->movie->title;
         $this->runtime = $this->movie->runtime;
         $this->lang = $this->movie->lang;
@@ -184,6 +191,29 @@ class MovieIndex extends Component
     {
         $this->movie = Movie::findOrFail($movieId);
         $this->showMovieDetailModal = true;
+    }
+
+    public function tagAdded()
+    {
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Tag Added']);
+        $this->reset();
+    }
+
+    public function tagDetached()
+    {
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Tag detached']);
+        $this->reset();
+    }
+    public function castAdded()
+    {
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Cast Added']);
+        $this->reset();
+    }
+
+    public function castDetached()
+    {
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Cast detached']);
+        $this->reset();
     }
 
       public function render()

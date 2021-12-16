@@ -173,6 +173,7 @@
                     <div class="flex border border-black overflow-hidden">
                         <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 0">Form</button>
                         <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 1">Tags</button>
+                        <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 2">Casts</button>
                     </div>
                     <div>
                         <div class="p-4 space-x-2" x-show="tab === 0">
@@ -268,6 +269,11 @@
                         <div class="p-4 space-x-2" x-show="tab === 1">
                             @if ($movie)
                                 <livewire:movie-tag :movie="$movie" />
+                            @endif
+                        </div>
+                        <div class="p-4 space-x-2" x-show="tab === 2">
+                            @if ($movie)
+                                <livewire:movie-cast :movie="$movie" />
                             @endif
                         </div>
                     </div>

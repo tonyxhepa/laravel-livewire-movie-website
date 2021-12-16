@@ -15,6 +15,10 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('tailwindcss'),
+    ])
+     .postCss('resources/css/front.css', 'public/css', [
+        require('postcss-import'),
+        require('tailwindcss'),
     ]);
 
 if (mix.inProduction()) {

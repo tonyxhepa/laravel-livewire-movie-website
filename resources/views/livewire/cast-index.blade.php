@@ -76,7 +76,6 @@
                                 {{ $cast->name }}
                             </td>
                             <td class="px-4 py-3 text-ms font-semibold border">{{ $cast->poster_path }}</td>
-                            <td class="px-4 py-3 text-ms font-semibold border">{{ $cast->season_number }}</td>
 
                             <td class="px-4 py-3 text-sm border">
                                 <x-m-button wire:click="showEditModal({{ $cast->id }})"
