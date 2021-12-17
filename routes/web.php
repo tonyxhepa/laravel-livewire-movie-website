@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CastController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SerieController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Livewire\CastIndex;
 use App\Http\Livewire\EpisodeIndex;
@@ -12,6 +16,11 @@ use App\Http\Livewire\TagIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/series', [SerieController::class, 'index'])->name('series.index');
+Route::get('/casts', [CastController::class, 'index'])->name('casts.index');
+Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('genres.show');
+
 
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
