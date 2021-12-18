@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -20,7 +20,7 @@
     <!-- Scripts -->
 </head>
 
-<body>
+<body class="bg-gray-200 dark:bg-gray-700">
     <x-navbar />
     {{ $slot }}
     <x-footer />

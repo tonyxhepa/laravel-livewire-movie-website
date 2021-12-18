@@ -1,4 +1,4 @@
-<footer class="text-gray-600 dark:text-gray-200 body-font dark:bg-gray-800">
+<footer class="text-gray-600 dark:text-gray-200 body-font dark:bg-gray-800 mt-4">
     <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
         <a
             class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900 dark:text-gray-50">
