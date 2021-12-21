@@ -73,11 +73,14 @@
                     </div>
                 </div>
             </section>
-            <section class="max-w-6xl mx-auto bg-yellow-600 text-indigo-600 mt-6 p-2">
-                @foreach ($movie->tags as $tag)
-                    <span class="font-bold hover:text-indigo-200 cursor-pointer">#{{ $tag->tag_name }}</span>
-                @endforeach
-            </section>
+            @if (count($movie->tags) > 0)
+                <section class="max-w-6xl mx-auto bg-gradient-to-r from-indigo-700 to-transparent mt-6 p-2">
+                    @foreach ($movie->tags as $tag)
+                        <span
+                            class="font-bold text-white hover:text-indigo-200 cursor-pointer">#{{ $tag->tag_name }}</span>
+                    @endforeach
+                </section>
+            @endif
         </main>
     @endif
 

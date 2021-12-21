@@ -52,7 +52,7 @@
             <div class="m-2 p-2 text-2xl font-bold text-indigo-600 dark:text-indigo-300">
                 <h1>Episodes</h1>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 rounded">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 rounded">
                 @foreach ($episodes as $episode)
                     <x-movie-card>
                         <x-slot name="image">
@@ -79,21 +79,28 @@
             <div class="m-2 p-2 text-2xl font-bold text-indigo-600 dark:text-indigo-300">
                 <h1>Series</h1>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 rounded">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 rounded">
                 @foreach ($series as $serie)
                     <x-movie-card>
                         <x-slot name="image">
-                            <a href="">
+                            <a href="{{ route('series.show', $serie->slug) }}">
                                 <div class="aspect-w-2 aspect-h-3">
                                     <img class="object-cover"
                                         src="https://www.themoviedb.org/t/p/w220_and_h330_face/{{ $serie->poster_path }}">
-                                    <div class="absolute left-0 top-0 h-8 w-12 bg-gray-800 text-blue-400 text-center">
-                                        New
-                                    </div>
+                                </div>
+                                <div class="absolute inset-0 z-10 bg-gradient-to-t from-black to-transparent"></div>
+
+                                <div
+                                    class="absolute x-10 left-2 top-2 h-6 w-12 bg-gray-800 group-hover:bg-gray-700 text-blue-400 text-center rounded">
+                                    New
+                                </div>
+                                <div
+                                    class="absolute z-10 bottom-2 left-2 text-indigo-300 text-sm font-bold group-hover:text-blue-700">
+                                    {{ $serie->seasons_count }} Season/s
                                 </div>
                             </a>
                         </x-slot>
-                        <a href="/">
+                        <a href="{{ route('series.show', $serie->slug) }}">
                             <div class="dark:text-white font-bold group-hover:text-blue-400">
                                 {{ $serie->name }}
                             </div>
