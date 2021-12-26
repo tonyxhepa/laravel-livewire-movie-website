@@ -70,13 +70,13 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white">
-                    @foreach ($episodes as $episode)
+                    @foreach ($episodes as $tepisode)
                         <tr class="text-gray-700">
                             <td class="px-4 py-3 border">
-                                {{ $episode->name }}
+                                {{ $tepisode->name }}
                             </td>
                             <td class="px-4 py-3 text-ms font-semibold border">
-                                @if ($episode->is_public)
+                                @if ($tepisode->is_public)
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         Published
@@ -89,12 +89,14 @@
 
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-ms font-semibold border">{{ $episode->episode_number }}</td>
+                            <td class="px-4 py-3 text-ms font-semibold border">{{ $tepisode->episode_number }}</td>
 
                             <td class="px-4 py-3 text-sm border">
-                                <x-m-button wire:click="showEditModal({{ $episode->id }})"
+                                <x-m-button wire:click="showTrailerModal({{ $tepisode->id }})"
+                                    class="bg-indigo-500 hover:bg-indigo-700 text-white">Trailer</x-m-button>
+                                <x-m-button wire:click="showEditModal({{ $tepisode->id }})"
                                     class="bg-green-500 hover:bg-green-700 text-white">Edit</x-m-button>
-                                <x-m-button wire:click="deleteEpisode({{ $episode->id }})"
+                                <x-m-button wire:click="deleteEpisode({{ $tepisode->id }})"
                                     class="bg-red-500 hover:bg-red-700 text-white">Delete</x-m-button>
                             </td>
                         </tr>
@@ -164,6 +166,53 @@
             </x-m-button>
 
             <x-m-button wire:click="updateEpisode">Update</x-m-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+    <x-jet-dialog-modal wire:model="showTrailer">
+        <x-slot name="title">Trailer Episode</x-slot>
+        <x-slot name="content">
+            @if ($episode)
+                <div class="flex space-x-4 space-y-2 m-2">
+                    @foreach ($episode->trailers as $trailer)
+                        <x-jet-button wire:click="deleteTrailer({{ $trailer->id }})" class="hover:bg-red-500">
+                            {{ $trailer->name }}</x-jet-button>
+                    @endforeach
+                </div>
+            @endif
+            <div class="mt-10 sm:mt-0">
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <form>
+                        <div class="shadow overflow-hidden sm:rounded-md">
+                            <div class="px-4 py-5 bg-white sm:p-6">
+                                <div class="flex flex-col">
+                                    <label for="first-name"
+                                        class="block text-sm font-medium text-gray-700 mr-4">Name</label>
+                                    <input wire:model="trailerName" type="text"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    @error('trailerName')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="embedHtml" class="block text-sm font-medium text-gray-700 mr-4">Embed
+                                        Html</label>
+                                    <textarea wire:model="embedHtml"
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                                    @error('embedHtml')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+            <x-m-button wire:click="closeEpisodeModal" class="bg-gray-600 hover:bg-gray-800 text-white">Cancel
+            </x-m-button>
+            <x-m-button wire:click="addTrailer">Add Trailer</x-m-button>
         </x-slot>
     </x-jet-dialog-modal>
 </section>

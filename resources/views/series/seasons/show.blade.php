@@ -30,12 +30,14 @@
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
                             @foreach ($season->episodes as $episode)
                                 <x-movie-card>
-                                    <a href="">
-                                        <x-slot name="image">
+                                    <x-slot name="image">
+                                        <a href="{{ route('episodes.show', $episode->slug) }}">
                                             <img class=""
                                                 src="https://www.themoviedb.org/t/p/w220_and_h330_face/{{ $season->poster_path }}">
-                                        </x-slot>
-                                        <span class="text-white">{{ $season->name }}</span>
+                                        </a>
+                                    </x-slot>
+                                    <a href="{{ route('episodes.show', $episode->slug) }}">
+                                        <span class="text-white">{{ $episode->name }}</span>
                                     </a>
                                 </x-movie-card>
                             @endforeach

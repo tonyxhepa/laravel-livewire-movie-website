@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Serie;
 use Illuminate\Http\Request;
@@ -25,5 +26,11 @@ class SerieController extends Controller
     {
         $latests = Season::withCount('episodes')->orderBy('created_at', 'desc')->take(9)->get();
         return view('series.seasons.show', compact('serie', 'season'));
+    }
+
+    public function showEpisode(Episode $episode)
+    {
+        $latests = Episode::orderBy('created_at', 'desc')->take(9)->get();
+        return view('episodes.show', compact('episode'));
     }
 }

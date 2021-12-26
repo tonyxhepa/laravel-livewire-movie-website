@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
         "spatie/laravel-permission": "^5.3",
+        "spatie/laravel-searchable": "^1.10",
         "usernotnull/tall-toasts": "^1.2"
     },
     "require-dev": {

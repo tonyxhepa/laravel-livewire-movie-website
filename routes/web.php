@@ -21,9 +21,10 @@ Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movi
 Route::get('/series', [SerieController::class, 'index'])->name('series.index');
 Route::get('/series/{serie:slug}', [SerieController::class, 'show'])->name('series.show');
 Route::get('/series/{serie:slug}/seasons/{season:slug}', [SerieController::class, 'seasonShow'])->name('season.show');
-
-Route::get('/casts', [CastController::class, 'index'])->name('casts.index');
-Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('genres.show');
+Route::get('/episodes/{episode:slug}', [SerieController::class, 'showEpisode'])->name('episodes.show');
+Route::get( '/casts', [CastController::class, 'index'])->name('casts.index');
+Route::get('/casts/{cast:slug}', [CastController::class, 'show'])->name('casts.show');
+Route::get('/genre/{genre:slug}', [GenreController::class, 'show'])->name('genres.show');
 
 
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
